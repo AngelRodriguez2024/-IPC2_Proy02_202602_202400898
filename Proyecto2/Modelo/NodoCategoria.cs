@@ -3,14 +3,18 @@ namespace Proyecto2.Models
     public class NodoCategoria
     {
         public string Nombre { get; set; }
-        public ArbolAVL Libros { get; set; } // Su propio árbol AVL de libros
-        public ListaCategorias Subcategorias { get; set; } // Lista de hijas
+        public ArbolAVL Libros { get; set; } // TDA no lineal
+
+        // Representación de árbol N-ario mediante punteros binarios
+        public NodoCategoria PrimerHijo { get; set; }       // Subcategoría directa
+        public NodoCategoria SiguienteHermano { get; set; } // Subcategoría hermana
 
         public NodoCategoria(string nombre)
         {
             Nombre = nombre;
             Libros = new ArbolAVL();
-            Subcategorias = new ListaCategorias();
+            PrimerHijo = null;
+            SiguienteHermano = null;
         }
     }
 }

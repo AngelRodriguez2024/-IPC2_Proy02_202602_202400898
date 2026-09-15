@@ -9,69 +9,65 @@ namespace Proyecto2.Models
             Raiz = null;
         }
 
-        // Busca una categoría por su nombre en todo el árbol de forma recursiva
+        // Búsqueda en profundidad dentro del árbol N-ario
         public NodoCategoria BuscarCategoria(string nombre)
         {
             if (string.IsNullOrEmpty(nombre)) return null;
             return BuscarRecursivo(Raiz, nombre);
         }
 
-        private NodoCategoria BuscarRecursivo(NodoCategoria actual, string nombre)
+        private NodoCategoria BuscarRecursivo(NodoCategoria nodo, string nombre)
         {
-            if (actual == null) return null;
+            if (nodo == null) return null;
 
-            // Si coincide el nombre
-            if (actual.Nombre.Equals(nombre, System.StringComparison.OrdinalIgnoreCase))
-            {
-                return actual;
-            }
+            if (nodo.Nombre.Equals(nombre, System.StringComparison.OrdinalIgnoreCase))
+                return nodo;
 
-            // Buscar en sus subcategorías (hijas)
-            ElementoCategoria subActual = actual.Subcategorias.Cabeza;
-            while (subActual != null)
-            {
-                NodoCategoria resultado = BuscarRecursivo(subActual.Categoria, nombre);
-                if (resultado != null)
-                {
-                    return resultado;
-                }
-                subActual = subActual.Siguiente;
-            }
+            // Buscar en sus subcategorías (hijos)
+            NodoCategoria encontrado = BuscarRecursivo(nodo.PrimerHijo, nombre);
+            if (encontrado != null) return encontrado;
 
-            return null;
+            // Buscar en el mismo nivel (hermanos)
+            return BuscarRecursivo(nodo.SiguienteHermano, nombre);
         }
 
-        // Inserta una nueva categoría indicando quién es su padre (si padre == null, es la raíz principal)
+        // Inserción ordenada alfabéticamente usando únicamente punteros de hermano
         public bool AgregarCategoria(string nombreNueva, string nombrePadre)
         {
-            // El enunciado especifica que no pueden existir nombres duplicados de categorías
-            if (BuscarCategoria(nombreNueva) != null)
-            {
-                return false; // Ya existe
-            }
+            if (BuscarCategoria(nombreNueva) != null) return false;
 
-            NodoCategoria nuevaCat = new NodoCategoria(nombreNueva);
+            NodoCategoria nueva = new NodoCategoria(nombreNueva);
 
-            // Si no tiene padre, se establece como la categoría raíz principal
             if (string.IsNullOrEmpty(nombrePadre) || Raiz == null)
             {
                 if (Raiz == null)
                 {
-                    Raiz = nuevaCat;
+                    Raiz = nueva;
                     return true;
                 }
-                return false; // Ya hay una raíz principal definida
+                return false;
             }
 
-            // Si tiene padre, buscamos al padre en la jerarquía
-            NodoCategoria nodoPadre = BuscarCategoria(nombrePadre);
-            if (nodoPadre != null)
+            NodoCategoria padre = BuscarCategoria(nombrePadre);
+            if (padre != null)
             {
-                nodoPadre.Subcategorias.AgregarOrdenado(nuevaCat);
+                padre.PrimerHijo = InsertarHermanoOrdenado(padre.PrimerHijo, nueva);
                 return true;
             }
 
-            return false; // El padre especificado no existe
+            return false;
+        }
+
+        private NodoCategoria InsertarHermanoOrdenado(NodoCategoria actual, NodoCategoria nueva)
+        {
+            if (actual == null || string.Compare(nueva.Nombre, actual.Nombre, System.StringComparison.OrdinalIgnoreCase) < 0)
+            {
+                nueva.SiguienteHermano = actual;
+                return nueva;
+            }
+
+            actual.SiguienteHermano = InsertarHermanoOrdenado(actual.SiguienteHermano, nueva);
+            return actual;
         }
     }
 }

@@ -33,7 +33,7 @@ namespace Proyecto2.Modelo
         private NodoAVL RotacionDerecha(NodoAVL y)
         {
             // 1. Guardamos las referencias necesarias
-            NodoAVL x = y.Izquierdo;
+            NodoAVL x = y.Izquierdo; // y es la raiz, x el nodo central
             NodoAVL T2 = x.Derecho;
 
             // 2. Realizamos la rotación (reacomodo de punteros)
@@ -51,7 +51,7 @@ namespace Proyecto2.Modelo
         private NodoAVL RotacionIzquierda(NodoAVL x)
         {
             // 1. Guardamos referencias
-            NodoAVL y = x.Derecho;
+            NodoAVL y = x.Derecho; // x es la raiz, y el nodo central
             NodoAVL T2 = y.Izquierdo;
 
             // 2. Realizamos la rotación
@@ -254,20 +254,20 @@ namespace Proyecto2.Modelo
             return actual;
         }
 
-        public ListaLibros ObtenerEnOrden()
+        public string ObtenerTextoEnOrden()
         {
-            ListaLibros lista = new ListaLibros();
-            ObtenerEnOrdenRecursivo(Raiz, lista);
-            return lista;
+            StringBuilder sb = new StringBuilder();
+            ObtenerEnOrdenRecursivo(Raiz, sb);
+            return sb.ToString();
         }
 
-        private void ObtenerEnOrdenRecursivo(NodoAVL nodo, ListaLibros lista)
+        private void ObtenerEnOrdenRecursivo(NodoAVL nodo, StringBuilder sb)
         {
             if (nodo != null)
             {
-                ObtenerEnOrdenRecursivo(nodo.Izquierdo, lista); // 1. Subárbol izquierdo (menores)
-                lista.Agregar(nodo.Dato);                       // 2. Nodo actual
-                ObtenerEnOrdenRecursivo(nodo.Derecho, lista);   // 3. Subárbol derecho (mayores)
+                ObtenerEnOrdenRecursivo(nodo.Izquierdo, sb);
+                sb.AppendLine($"[ISBN: {nodo.Dato.ISBN}] {nodo.Dato.Titulo} - {nodo.Dato.Autor}");
+                ObtenerEnOrdenRecursivo(nodo.Derecho, sb);
             }
         }
     }
