@@ -92,5 +92,29 @@ namespace Proyecto2.Controllers
             ViewBag.LibroEncontrado = encontrado;
             return View("Index", sistemaCategorias);
         }
+
+        // GET: Generar reporte DOT del árbol N-ario de Categorías
+        public IActionResult ReporteCategorias()
+        {
+            string dotCode = GraphvizService.GenerarDotCategorias(sistemaCategorias.Raiz);
+            ViewBag.DotCategorias = dotCode;
+            return View("Index", sistemaCategorias);
+        }
+
+        // GET: Generar reporte DOT del Árbol AVL de una Categoría específica
+        public IActionResult ReporteAVL(string categoria)
+        {
+            NodoCategoria nodoCat = sistemaCategorias.BuscarCategoria(categoria);
+            string dotCode = "";
+
+            if (nodoCat != null)
+            {
+                dotCode = GraphvizService.GenerarDotAVL(nodoCat.Libros.Raiz);
+            }
+
+            ViewBag.DotAVL = dotCode;
+            ViewBag.CategoriaReporte = categoria;
+            return View("Index", sistemaCategorias);
+        }
     }
 }
