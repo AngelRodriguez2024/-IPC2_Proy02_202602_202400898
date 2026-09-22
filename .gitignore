@@ -427,3 +427,8 @@ FodyWeavers.xsd
 *.msix
 *.msm
 *.msp
+
+Proyecto2/bin/
+Proyecto2/obj/
+**/bin/
+**/obj/
