@@ -1,0 +1,144 @@
+@model Proyecto2.Models.ArbolCategorias
+@{
+    ViewData["Title"] = "Gestión del Catálogo de Libros";
+}
+
+<h2>Gestion del Catalogo de Libros</h2>
+
+@if (ViewBag.Mensaje != null)
+{
+    <div style="background-color: #d4edda; color: #155724; padding: 10px; margin-bottom: 15px; border-radius: 4px;">
+        @ViewBag.Mensaje
+    </div>
+}
+@if (ViewBag.MensajeError != null)
+{
+    <div style="background-color: #f8d7da; color: #721c24; padding: 10px; margin-bottom: 15px; border-radius: 4px;">
+        @ViewBag.MensajeError
+    </div>
+}
+
+<nav style="margin-bottom: 20px;">
+    <a href="/Catalog/Index" class="btn btn-secondary">Inicio / Catalogo</a> | 
+    <a href="/Catalog/Ayuda" class="btn btn-info">Seccion de Ayuda</a>
+</nav>
+
+<hr />
+
+<!-- Inicialización -->
+<div style="border: 1px solid #ccc; padding: 15px; margin-bottom: 15px; background: #f9f9f9;">
+    <h4>Inicializacion del Sistema</h4>
+    <form action="/Catalog/Inicializar" method="post">
+        <button type="submit" class="btn btn-danger">Inicializar / Limpiar Sistema</button>
+    </form>
+</div>
+
+<!-- Cargar XML -->
+<div style="border: 1px solid #ccc; padding: 15px; margin-bottom: 15px;">
+    <h4>Cargar Archivo XML de Entrada</h4>
+    <form action="/Catalog/CargarXml" method="post" enctype="multipart/form-data">
+        <input type="file" name="archivoXml" accept=".xml" required />
+        <button type="submit">Cargar XML</button>
+    </form>
+</div>
+
+<!-- Gestión de catálogo -->
+<div style="border: 1px solid #ccc; padding: 15px; margin-bottom: 15px;">
+    <h4>Gestion de Catalogo</h4>
+    
+    <!-- Estructura de categorías -->
+    <form action="/Catalog/ReporteCategorias" method="post" style="margin-bottom: 10px;">
+        <button type="submit">Mostrar Estructura de Categorias (N-Ario)</button>
+    </form>
+
+    <!-- Libros de una categoría -->
+    <form action="/Catalog/ReporteAVL" method="post" style="margin-bottom: 10px;">
+        <label>Categoria para ver AVL:</label>
+        <input type="text" name="categoria" required />
+        <button type="submit">Mostrar AVL Graficamente</button>
+    </form>
+
+    <!-- Agregar categoría -->
+    <form action="/Catalog/AgregarCategoria" method="post">
+        <label>Nombre Categoria:</label>
+        <input type="text" name="nombre" required />
+        <label>Categoria Padre (Opcional):</label>
+        <input type="text" name="padre" />
+        <button type="submit">Guardar Categoria</button>
+    </form>
+</div>
+
+<!-- Gestión de libros -->
+<div style="border: 1px solid #ccc; padding: 15px; margin-bottom: 15px;">
+    <h4>Gestion de Libros</h4>
+
+    <!-- Registrar nuevo libro -->
+    <h5>Registrar Nuevo Libro</h5>
+    <form action="/Catalog/RegistrarLibro" method="post" style="margin-bottom: 15px;">
+        <label>ISBN:</label> <input type="number" name="isbn" required />
+        <label>Titulo:</label> <input type="text" name="titulo" required />
+        <label>Autor:</label> <input type="text" name="autor" required />
+        <label>Categoria:</label> <input type="text" name="categoria" required />
+        <button type="submit">Guardar Libro</button>
+    </form>
+
+    <!-- Acciones sobre Libros -->
+    <h5>Consultas y Eliminacion</h5>
+    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+        
+        <!-- Eliminar libro -->
+        <form action="/Catalog/EliminarLibro" method="post" style="border: 1px solid #ddd; padding: 10px;">
+            <h6>Eliminar Libro</h6>
+            <label>ISBN:</label> <input type="number" name="isbn" required /><br />
+            <label>Categoria:</label> <input type="text" name="categoria" required /><br />
+            <button type="submit" class="btn btn-warning">Eliminar</button>
+        </form>
+
+        <!-- Mostrar menor ISBN -->
+        <form action="/Catalog/ObtenerMenorIsbn" method="post" style="border: 1px solid #ddd; padding: 10px;">
+            <h6>Mostrar Menor ISBN</h6>
+            <label>Categoria:</label> <input type="text" name="categoria" required /><br />
+            <button type="submit">Obtener Menor</button>
+        </form>
+
+        <!-- Mostrar mayor ISBN -->
+        <form action="/Catalog/ObtenerMayorIsbn" method="post" style="border: 1px solid #ddd; padding: 10px;">
+            <h6>Mostrar Mayor ISBN</h6>
+            <label>Categoria:</label> <input type="text" name="categoria" required /><br />
+            <button type="submit">Obtener Mayor</button>
+        </form>
+
+        <!-- Mostrar datos por ISBN -->
+        <form action="/Catalog/BuscarLibro" method="post" style="border: 1px solid #ddd; padding: 10px;">
+            <h6>Buscar por ISBN</h6>
+            <label>ISBN:</label> <input type="number" name="isbn" required /><br />
+            <label>Categoria:</label> <input type="text" name="categoria" required /><br />
+            <button type="submit">Buscar Libro</button>
+        </form>
+    </div>
+</div>
+
+<!-- Resultados de búsqueda/consultas de libros -->
+@if (ViewBag.LibroResultado != null)
+{
+    <div style="background-color: #e2e3e5; padding: 15px; margin-top: 15px; border-radius: 4px;">
+        <h4>@ViewBag.MensajeBusqueda</h4>
+        <p><strong>ISBN:</strong> @ViewBag.LibroResultado.ISBN</p>
+        <p><strong>Título:</strong> @ViewBag.LibroResultado.Titulo</p>
+        <p><strong>Autor:</strong> @ViewBag.LibroResultado.Autor</p>
+        <p><strong>Categoría:</strong> @ViewBag.LibroResultado.Categoria</p>
+    </div>
+}
+
+<!-- Reportes Graphviz DOT -->
+@if (ViewBag.DotCategorias != null)
+{
+    <h3>Codigo DOT - Arbol N-Ario de Categorías</h3>
+    <textarea style="width: 100%; height: 200px;">@ViewBag.DotCategorias</textarea>
+}
+
+@if (ViewBag.DotAVL != null)
+{
+    <h3>Codigo DOT - Arbol AVL (@ViewBag.CategoriaReporte)</h3>
+    <textarea style="width: 100%; height: 200px;">@ViewBag.DotAVL</textarea>
+}
