@@ -130,15 +130,29 @@
     </div>
 }
 
-<!-- Reportes Graphviz DOT -->
+<!-- Reportes Graphviz DOT y Gráficos Visuales -->
 @if (ViewBag.DotCategorias != null)
 {
-    <h3>Codigo DOT - Arbol N-Ario de Categorías</h3>
-    <textarea style="width: 100%; height: 200px;">@ViewBag.DotCategorias</textarea>
+    <h3>Estructura Visual - Árbol N-Ario de Categorías</h3>
+    
+    <!-- Renderizado de la imagen -->
+    <div style="text-align: center; margin-bottom: 20px; border: 1px solid #ccc; padding: 15px; background: #fff; border-radius: 5px;">
+        <img src="@ViewBag.UrlCategorias" alt="Gráfico de Categorías" style="max-width: 100%; height: auto;" />
+    </div>
+
+    <h4>Código DOT</h4>
+    <textarea style="width: 100%; height: 150px;" readonly>@ViewBag.DotCategorias</textarea>
 }
 
 @if (ViewBag.DotAVL != null)
 {
-    <h3>Codigo DOT - Arbol AVL (@ViewBag.CategoriaReporte)</h3>
-    <textarea style="width: 100%; height: 200px;">@ViewBag.DotAVL</textarea>
+    <h3>Estructura Visual - Árbol AVL (@ViewBag.CategoriaReporte)</h3>
+    
+    <!-- Renderizado de la imagen -->
+    <div style="text-align: center; margin-bottom: 20px; border: 1px solid #ccc; padding: 15px; background: #fff; border-radius: 5px;">
+        <img src="@ViewBag.UrlAVL" alt="Gráfico AVL" style="max-width: 100%; height: auto;" />
+    </div>
+
+    <h4>Código DOT</h4>
+    <textarea style="width: 100%; height: 150px;" readonly>@ViewBag.DotAVL</textarea>
 }

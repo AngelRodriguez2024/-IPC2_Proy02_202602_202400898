@@ -33,8 +33,11 @@ namespace Proyecto2.Controllers
                     XmlParser.CargarXmlDesdeStream(stream, sistemaCategorias);
                 }
                 
-                // Asignar el DOT de categorías inmediatamente al cargar
-                ViewBag.DotCategorias = GraphvizService.GenerarDotCategorias(sistemaCategorias.Raiz);
+                string dotCode = GraphvizService.GenerarDotCategorias(sistemaCategorias.Raiz);
+                ViewBag.DotCategorias = dotCode;
+                // NUEVA LÍNEA: Genera el enlace de la imagen
+                ViewBag.UrlCategorias = $"https://quickchart.io/graphviz?graph={System.Net.WebUtility.UrlEncode(dotCode)}";
+                
                 ViewBag.Mensaje = "Archivo XML cargado exitosamente.";
             }
             return View("Index", sistemaCategorias);
@@ -45,7 +48,11 @@ namespace Proyecto2.Controllers
         [HttpGet]
         public IActionResult ReporteCategorias()
         {
-            ViewBag.DotCategorias = GraphvizService.GenerarDotCategorias(sistemaCategorias.Raiz);
+            string dotCode = GraphvizService.GenerarDotCategorias(sistemaCategorias.Raiz);
+            ViewBag.DotCategorias = dotCode;
+            // NUEVA LÍNEA: Genera el enlace de la imagen
+            ViewBag.UrlCategorias = $"https://quickchart.io/graphviz?graph={System.Net.WebUtility.UrlEncode(dotCode)}";
+            
             return View("Index", sistemaCategorias);
         }
 
@@ -57,8 +64,11 @@ namespace Proyecto2.Controllers
                 NodoCategoria cat = sistemaCategorias.BuscarCategoria(categoria.Trim());
                 if (cat != null)
                 {
-                    ViewBag.DotAVL = GraphvizService.GenerarDotAVL(cat.Libros.Raiz);
+                    string dotCode = GraphvizService.GenerarDotAVL(cat.Libros.Raiz);
+                    ViewBag.DotAVL = dotCode;
                     ViewBag.CategoriaReporte = categoria;
+                    // NUEVA LÍNEA: Genera el enlace de la imagen AVL
+                    ViewBag.UrlAVL = $"https://quickchart.io/graphviz?graph={System.Net.WebUtility.UrlEncode(dotCode)}";
                 }
                 else
                 {
