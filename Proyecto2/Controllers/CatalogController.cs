@@ -12,7 +12,6 @@ namespace Proyecto2.Controllers
             return View(sistemaCategorias);
         }
 
-        // a. Inicialización - Limpia todo el sistema
         [HttpPost]
         public IActionResult Inicializar()
         {
@@ -20,8 +19,7 @@ namespace Proyecto2.Controllers
             ViewBag.Mensaje = "Sistema inicializado correctamente. Memoria limpia.";
             return View("Index", sistemaCategorias);
         }
-
-        // b. Cargar XML
+        
         [HttpPost]
         public IActionResult CargarXml(IFormFile archivoXml)
         {
@@ -32,10 +30,9 @@ namespace Proyecto2.Controllers
                 {
                     XmlParser.CargarXmlDesdeStream(stream, sistemaCategorias);
                 }
-                
                 string dotCode = GraphvizService.GenerarDotCategorias(sistemaCategorias.Raiz);
                 ViewBag.DotCategorias = dotCode;
-                // NUEVA LÍNEA: Genera el enlace de la imagen
+                
                 ViewBag.UrlCategorias = $"https://quickchart.io/graphviz?graph={System.Net.WebUtility.UrlEncode(dotCode)}";
                 
                 ViewBag.Mensaje = "Archivo XML cargado exitosamente.";
@@ -43,20 +40,17 @@ namespace Proyecto2.Controllers
             return View("Index", sistemaCategorias);
         }
 
-        // c.a Estructura de categorías (N-Ario)
         [HttpPost]
         [HttpGet]
         public IActionResult ReporteCategorias()
         {
             string dotCode = GraphvizService.GenerarDotCategorias(sistemaCategorias.Raiz);
             ViewBag.DotCategorias = dotCode;
-            // NUEVA LÍNEA: Genera el enlace de la imagen
             ViewBag.UrlCategorias = $"https://quickchart.io/graphviz?graph={System.Net.WebUtility.UrlEncode(dotCode)}";
             
             return View("Index", sistemaCategorias);
         }
 
-        // c.b Mostrar AVL
         public IActionResult ReporteAVL(string categoria)
         {
             if (!string.IsNullOrWhiteSpace(categoria))
@@ -78,7 +72,6 @@ namespace Proyecto2.Controllers
             return View("Index", sistemaCategorias);
         }
 
-        // c.c Agregar categoría
         [HttpPost]
         public IActionResult AgregarCategoria(string nombre, string padre)
         {
@@ -87,7 +80,6 @@ namespace Proyecto2.Controllers
             return View("Index", sistemaCategorias);
         }
 
-        // d.a Registrar libro
         [HttpPost]
         public IActionResult RegistrarLibro(int isbn, string titulo, string autor, string categoria)
         {
@@ -105,7 +97,6 @@ namespace Proyecto2.Controllers
             return View("Index", sistemaCategorias);
         }
 
-        // d.b Eliminar libro
         [HttpPost]
         public IActionResult EliminarLibro(int isbn, string categoria)
         {
@@ -121,7 +112,6 @@ namespace Proyecto2.Controllers
             return View("Index", sistemaCategorias);
         }
 
-        // d.c Mostrar libro con el MENOR ISBN
         [HttpPost]
         public IActionResult ObtenerMenorIsbn(string categoria)
         {
@@ -138,7 +128,6 @@ namespace Proyecto2.Controllers
             return View("Index", sistemaCategorias);
         }
 
-        // d.d Mostrar libro con el MAYOR ISBN
         [HttpPost]
         public IActionResult ObtenerMayorIsbn(string categoria)
         {
@@ -155,7 +144,6 @@ namespace Proyecto2.Controllers
             return View("Index", sistemaCategorias);
         }
 
-        // d.e Buscar por ISBN
         [HttpPost]
         public IActionResult BuscarLibro(int isbn, string categoria)
         {
@@ -172,7 +160,6 @@ namespace Proyecto2.Controllers
             return View("Index", sistemaCategorias);
         }
 
-        // e. Ayuda
         public IActionResult Ayuda()
         {
             return View();
