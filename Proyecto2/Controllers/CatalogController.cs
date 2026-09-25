@@ -32,9 +32,7 @@ namespace Proyecto2.Controllers
                 }
                 string dotCode = GraphvizService.GenerarDotCategorias(sistemaCategorias.Raiz);
                 ViewBag.DotCategorias = dotCode;
-                
                 ViewBag.UrlCategorias = $"https://quickchart.io/graphviz?graph={System.Net.WebUtility.UrlEncode(dotCode)}";
-                
                 ViewBag.Mensaje = "Archivo XML cargado exitosamente.";
             }
             return View("Index", sistemaCategorias);
@@ -61,7 +59,6 @@ namespace Proyecto2.Controllers
                     string dotCode = GraphvizService.GenerarDotAVL(cat.Libros.Raiz);
                     ViewBag.DotAVL = dotCode;
                     ViewBag.CategoriaReporte = categoria;
-                    // NUEVA LÍNEA: Genera el enlace de la imagen AVL
                     ViewBag.UrlAVL = $"https://quickchart.io/graphviz?graph={System.Net.WebUtility.UrlEncode(dotCode)}";
                 }
                 else
